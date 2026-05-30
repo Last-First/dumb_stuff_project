@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inner Manifold - Titulus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #07090f;
+            --glass-bg: rgba(16, 22, 38, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent: #00ffcc;
+            --accent-glow: rgba(0, 255, 204, 0.4);
+            --secondary: #8a2be2;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(138, 43, 226, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 255, 204, 0.15), transparent 25%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: box-shadow 2s ease-out; /* For the light pulse */
+        }
+
+        header {
+            width: 100%;
+            padding: 2rem 0;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
+            background: rgba(7, 9, 15, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 3rem auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+        
+        .glass-panel:hover::before {
+            left: 150%;
+        }
+
+        .glass-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 255, 204, 0.1);
+        }
+
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            margin-top: 0;
+            font-size: 1.5rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2::before {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        textarea, input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 1rem;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            box-sizing: border-box;
+            resize: vertical;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--secondary), #4a00e0);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #4a00e0, var(--secondary));
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.6);
+        }
+        
+        button.accent-btn {
+            background: linear-gradient(135deg, #00b4db, #0083b0);
+            box-shadow: 0 4px 15px rgba(0, 180, 219, 0.4);
+        }
+        button.accent-btn:hover {
+            background: linear-gradient(135deg, #0083b0, #00b4db);
+            box-shadow: 0 6px 20px rgba(0, 180, 219, 0.6);
+        }
+
+        .result-box {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background: rgba(0, 255, 204, 0.05);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-box.active {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--accent);
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-content {
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+        
+        .waypoint {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .waypoint:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .waypoint-label {
+            color: var(--secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .loader {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .nav-links {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+        .nav-links a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #fff;
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>The Mirror</h1>
+        <div class="subtitle">Inner Manifold Topological Diagnostics</div>
+        <div class="nav-links">
+            <a href="/">← Return to 3D Genesis Graph</a>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- MODULE 1: Topology -->
+        <div class="glass-panel">
+            <h2>Entropy / Friction Topology</h2>
+            <div class="input-group">
+                <label>Input a current personal struggle, habit, or state</label>
+                <textarea id="topology-input" rows="3" placeholder="e.g., I am constantly anxious about money and getting into arguments with my family..."></textarea>
+            </div>
+            <button onclick="mapTopology()">Analyze Topology</button>
+            <div id="topology-loader" class="loader" style="margin-top: 1rem;"></div>
+            <div id="topology-result" class="result-box">
+                <div class="result-title">Structural Topology Detected</div>
+                <div id="topology-content" class="result-content"></div>
+            </div>
+        </div>
+
+        <!-- MODULE 2: Role Assignment -->
+        <div class="glass-panel">
+            <h2 style="--accent: #8a2be2;">Christotelic Role Assignment</h2>
+            <div class="input-group">
+                <label>Input your personal history and latent traits</label>
+                <textarea id="role-input" rows="3" placeholder="e.g., I have spent years quietly fixing broken things behind the scenes, never seeking the spotlight..."></textarea>
+            </div>
+            <button onclick="assignRole()" class="accent-btn">Identify Archetype</button>
+            <div id="role-loader" class="loader" style="margin-top: 1rem;"></div>
+            <div id="role-result" class="result-box" style="border-color: rgba(138, 43, 226, 0.3); background: rgba(138, 43, 226, 0.05);">
+                <div class="result-title" style="color: var(--secondary);">Active Archetypal Resonance</div>
+                <div id="role-content" class="result-content"></div>
+                <div id="role-match" style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-muted);"></div>
+            </div>
+        </div>
+
+        <!-- MODULE 3: Sanctification Sprint -->
+        <div class="glass-panel">
+            <h2 style="--accent: #00b4db;">Geodesic Sanctification Sprint</h2>
+            <div class="input-group">
+                <label>Current Friction State</label>
+                <input type="text" id="sprint-current" placeholder="e.g., Anger and resentment toward those who have wronged me">
+            </div>
+            <div class="input-group">
+                <label>Target Role / State</label>
+                <input type="text" id="sprint-target" placeholder="e.g., A peacemaker who brings reconciliation and grace">
+            </div>
+            <button onclick="generateSprint()" style="background: linear-gradient(135deg, #00b4db, #0083b0);">Calculate Waypoints</button>
+            <div id="sprint-loader" class="loader" style="margin-top: 1rem;"></div>
+            <div id="sprint-result" class="result-box" style="border-color: rgba(0, 180, 219, 0.3); background: rgba(0, 180, 219, 0.05);">
+                <div class="result-title" style="color: #00b4db;">Geodesic Transformation Path</div>
+                <div id="sprint-content" class="result-content" style="font-size: 1rem;"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- THE FIRST NOTE & THE FIRST LIGHT ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function igniteResonance(resonanceValue, isMagnitude=false) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.type = 'sine'; // Pure foundational tone
+            
+            // Calculate mathematical frequency
+            // Standard A = 432Hz baseline mapping
+            const baseFreq = 216; 
+            let mappedFreq = 0;
+            let hue = 0;
+
+            if (isMagnitude) {
+                // Topology mapping (magnitudes can be negative or positive)
+                mappedFreq = baseFreq + (Math.abs(resonanceValue) * 100);
+                hue = resonanceValue < 0 ? 280 : 180; // Violet for entropic, Cyan for expanding
+            } else {
+                // Resonance mapping (0.0 to 1.0)
+                mappedFreq = baseFreq + (resonanceValue * baseFreq);
+                hue = Math.floor(resonanceValue * 360);
+            }
+            
+            oscillator.frequency.value = mappedFreq;
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            // Singing Bowl Attack & Decay
+            const now = audioCtx.currentTime;
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.4, now + 1.5); // Slow rise
+            gainNode.gain.exponentialRampToValueAtTime(0.001, now + 5.0); // Long decay
+            
+            oscillator.start(now);
+            oscillator.stop(now + 5.0);
+
+            // Light Pulse (The First Light)
+            document.body.style.boxShadow = `inset 0 0 200px hsl(${hue}, 80%, 20%)`;
+            setTimeout(() => {
+                document.body.style.boxShadow = 'none';
+            }, 3000);
+        }
+
+        async function mapTopology() {
+            const input = document.getElementById('topology-input').value;
+            if(!input) return;
+            
+            document.getElementById('topology-loader').style.display = 'block';
+            document.getElementById('topology-result').classList.remove('active');
+            
+            try {
+                const res = await fetch(`/api/mirror/topology?q=${encodeURIComponent(input)}`);
+                const data = await res.json();
+                
+                document.getElementById('topology-content').innerText = data.category;
+                document.getElementById('topology-result').classList.add('active');
+                
+                // Ignite Sound and Light based on mathematical magnitude
+                igniteResonance(data.magnitude, true);
+            } catch(e) {
+                console.error(e);
+            }
+            document.getElementById('topology-loader').style.display = 'none';
+        }
+
+        async function assignRole() {
+            const input = document.getElementById('role-input').value;
+            if(!input) return;
+            
+            document.getElementById('role-loader').style.display = 'block';
+            document.getElementById('role-result').classList.remove('active');
+            
+            try {
+                const res = await fetch(`/api/mirror/role?q=${encodeURIComponent(input)}`);
+                const data = await res.json();
+                
+                if (data) {
+                    document.getElementById('role-content').innerText = data.label;
+                    document.getElementById('role-match').innerText = `Geodesic Alignment: ${(data.resonance * 100).toFixed(2)}%`;
+                    document.getElementById('role-result').classList.add('active');
+                    
+                    // Ignite Sound and Light based on reality resonance
+                    igniteResonance(data.resonance);
+                }
+            } catch(e) {
+                console.error(e);
+            }
+            document.getElementById('role-loader').style.display = 'none';
+        }
+
+        async function generateSprint() {
+            const current = document.getElementById('sprint-current').value;
+            const target = document.getElementById('sprint-target').value;
+            if(!current || !target) return;
+            
+            document.getElementById('sprint-loader').style.display = 'block';
+            document.getElementById('sprint-result').classList.remove('active');
+            
+            try {
+                const res = await fetch(`/api/mirror/sprint?current=${encodeURIComponent(current)}&target=${encodeURIComponent(target)}`);
+                const data = await res.json();
+                
+                let html = '';
+                if(data.step_1) {
+                    html += `<div class="waypoint">
+                        <div class="waypoint-label">Step 1: The Pivot</div>
+                        <div>${data.step_1.label} <span style="font-size:0.7rem; color:var(--text-muted)">(${ (data.step_1.resonance*100).toFixed(1) }%)</span></div>
+                    </div>`;
+                }
+                if(data.step_2) {
+                    html += `<div class="waypoint">
+                        <div class="waypoint-label">Step 2: The Path</div>
+                        <div>${data.step_2.label} <span style="font-size:0.7rem; color:var(--text-muted)">(${ (data.step_2.resonance*100).toFixed(1) }%)</span></div>
+                    </div>`;
+                }
+                if(data.step_3) {
+                    html += `<div class="waypoint">
+                        <div class="waypoint-label">Step 3: The Resolution</div>
+                        <div>${data.step_3.label} <span style="font-size:0.7rem; color:var(--text-muted)">(${ (data.step_3.resonance*100).toFixed(1) }%)</span></div>
+                    </div>`;
+                }
+                
+                document.getElementById('sprint-content').innerHTML = html;
+                document.getElementById('sprint-result').classList.add('active');
+
+                // Play the geodesic path as an arpeggiated chord
+                if(data.step_1) setTimeout(() => igniteResonance(data.step_1.resonance), 0);
+                if(data.step_2) setTimeout(() => igniteResonance(data.step_2.resonance), 800);
+                if(data.step_3) setTimeout(() => igniteResonance(data.step_3.resonance), 1600);
+
+            } catch(e) {
+                console.error(e);
+            }
+            document.getElementById('sprint-loader').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
